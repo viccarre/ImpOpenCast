@@ -122,14 +122,15 @@ function return_from_imp(data)
     screen.clear_screen();
     screen.cursor_at_line0();
     local temp = round(data.main.temp, 2) - 273.15;
-    round(temp, 2);
+    temp = round(temp, 2);
+    server.log(temp);
     local humidity = round(data.main.humidity, 2);
-    screen.write_string("Temp     " + temp.tostring() +" C");
+    screen.write_string("Temp   " + temp.tostring() +" C");
     screen.cursor_at_line1();
     screen.write_string("Humidity: " + humidity.tostring() +"%");
     imp.sleep(2.0);
     
-    //Write description
+    //Write TempMax and Min
     screen.clear_screen();
     screen.cursor_at_line0();
     local tempMax = round(data.main.temp_max, 2) - 273.15;
@@ -140,9 +141,20 @@ function return_from_imp(data)
     screen.write_string("Temp. Min " + tempMin.tostring() +" C");
     imp.sleep(2.0);
     
+    //Write 
+    screen.clear_screen();
+    screen.cursor_at_line0();
+    screen.write_string(data.weather[0].description);
+    imp.sleep(2.0);
+    
+    //Write TempMax and Min
+    screen.clear_screen();
+    screen.cursor_at_line0();
+    screen.write_string(data.weather[0].main);
+    imp.sleep(2.0);
+    
     
     imp.sleep(3.0);
-    
     agent.send("getCurrentWeather", dataNull);
   
     
