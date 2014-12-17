@@ -10,13 +10,9 @@ server.log(response.statuscode + " - " + response.body);
 local data = http.jsondecode(response.body);
 
 device.send("CurrentWeather", data);
-server.log("Sending data to the Imp");
-server.log("Agent Data: ");
-server.log("Humidity: " + data.weather[0].main);
     
 }
 
 device.on("getCurrentWeather", currentWeather);
 
-//currentWeather();
 

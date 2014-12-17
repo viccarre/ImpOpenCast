@@ -77,21 +77,9 @@ imp.configure("Adafruit Serial LCD Class", [],[]);
     screen.set_size(16, 2);
     screen.set_contrast(200);
     screen.set_brightness(255);
-    screen.set_color(20, 20, 200); //Halloween orange
+    screen.set_color(20, 20, 200); //Blue
     screen.cursor_off();
-    screen.clear_screen();
-    screen.cursor_at_line0();
-    screen.write_string(format("Signal: %ddBm", imp.rssi())); 
-    screen.cursor_at_line1();
-    //screen.write_string(format("VREF: %.2fV", hardware.voltage()));
-    
-    screen.clear_screen();
-    screen.cursor_at_line0();
-    screen.write_string("Hello Boston!");
-    
-    
-    
-    ////////
+
     
     local dataNull;
 
@@ -111,17 +99,13 @@ function return_from_imp(data)
 {
     screen.clear_screen();
     screen.cursor_at_line0();
-    screen.write_string("Hello Boston!   <3");
+    screen.write_string("Boston forecast");
     imp.sleep(2.0);
-    screen.cursor_at_line0();
-    screen.write_string("Today's forecast");
-    imp.sleep(2.0);
-    
     
     //Write Temp and Humidity
     screen.clear_screen();
     screen.cursor_at_line0();
-    local temp = round(data.main.temp, 2) - 273.15;
+    local temp = data.main.temp - 273.15;
     temp = round(temp, 2);
     server.log(temp);
     local humidity = round(data.main.humidity, 2);
@@ -133,36 +117,44 @@ function return_from_imp(data)
     //Write TempMax and Min
     screen.clear_screen();
     screen.cursor_at_line0();
-    local tempMax = round(data.main.temp_max, 2) - 273.15;
-    local tempMin = round(data.main.temp_min, 2) - 273.15;
-    temp = round(temp, 2);
+    local tempMax = data.main.temp_max - 273.15;
+    local tempMin = data.main.temp_min - 273.15;
+    tempMax = round(tempMax, 1);
+    tempMin = round(tempMin, 1);
     screen.write_string("Temp. Max " + tempMax.tostring() +" C");
     screen.cursor_at_line1();
     screen.write_string("Temp. Min " + tempMin.tostring() +" C");
     imp.sleep(2.0);
     
-    //Write 
+    //Sunrise and sunset
     screen.clear_screen();
     screen.cursor_at_line0();
-    screen.write_string(data.weather[0].description);
+    local tempMax = data.main.temp_max - 273.15;
+    local tempMin = data.main.temp_min - 273.15;
+    tempMax = round(tempMax, 1);
+    tempMin = round(tempMin, 1);
+    screen.write_string("Temp. Max " + tempMax.tostring() +" C");
+    screen.cursor_at_line1();
+    screen.write_string("Temp. Min " + tempMin.tostring() +" C");
     imp.sleep(2.0);
     
     //Write TempMax and Min
     screen.clear_screen();
     screen.cursor_at_line0();
-    screen.write_string(data.weather[0].main);
+    screen.write_string("Description:");
+    screen.cursor_at_line1();
+    screen.write_string(data.weather[0].description);
     imp.sleep(2.0);
     
+    screen.clear_screen();
+    screen.cursor_at_line0();
+    screen.write_string("Data from: openweathermap.org");
+    imp.sleep(1.0);
     
-    imp.sleep(3.0);
     agent.send("getCurrentWeather", dataNull);
   
     
 }
- 
-screen.clear_screen();
-screen.cursor_at_line0();
-screen.write_string("Hello Boston!");
 
 agent.send("getCurrentWeather", dataNull);
 
